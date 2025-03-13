@@ -2,13 +2,14 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 
-ip = 'http://10.11.249.211/'
+ip = 'http://10.12.250.125/'
 url = ip + '.hidden/'
 count = 0
 
 def req_url(url):
     '''
     traverse an url and look for emmbedded link in the html tree
+    excluding the previous page (../)
     '''
     res = requests.get(url)
     html_tree = BeautifulSoup(res.text, 'html.parser')
@@ -20,6 +21,20 @@ def req_url(url):
     return dir_list
 
 def traverse_url(url, dir_list, result, flag):
+    '''
+    recursive path traversal to find a flag from a start url and list of sub_link, while storing all termination point.
+    receive as params : url, a list of directories (dir_list), two empty list : one empty result list (result), and flag
+    logic: 
+        - the url is start point, and dir_list is the list of link (imagine : url ip/folder and dir_list [link1, link2])
+        - if the dir_list is Null or lenght zero : no more traversal ->over
+        - if flag (initially empty) is filled -> return : no more traversal -> over
+        - for loop : traverse all the link in the array:
+            - build new url (from url= ip/folder -> new_url = ip/folder/link1)
+            - request it, the result should be a list of new url [link_1_1, link_1_2, ...], from here logic flow:
+                - if the result is empty or the link was a README -> we add the url to list of result (it is an termination point, edge on the graph)
+                - if the response content of this url contais "flag" -> add it to flag list (should end the recursion): flag found
+            - if the sub_dir isn't empty (contained new links) -> recusion with sub_dur as new dir_list
+    '''
     if dir_list is None or (len(dir_list) == 0 ):
         return
     if flag and len(flag) > 0:
@@ -51,7 +66,6 @@ if __name__ == "__main__":
     hidden_dir = req_url(url)
     #expect a result like ['amcbevgondgcrloowluziypjdh/', ... , 'zzfzjvjsupgzinctxeqtzzdzll/', 'README']
     
-    
     print("\n\nTraversing the hidden directory and its subfile ... can be long as recursive ...\n\n")
     subdir_url = []
     flag = []
@@ -70,6 +84,7 @@ if __name__ == "__main__":
         freq[r] = freq.get(r, 0) + 1
         sys.stdout.write(f"\rGetting content from downloadbale linl- total is now : {i} / {dir_size}")
         sys.stdout.flush()
+
     print("\n\nwhat were in the links ? here it is: \n\n")
     print(freq)
 
