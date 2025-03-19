@@ -24,7 +24,6 @@ Disallow: /.hidden
 
 so we tried /.hidden and found nothing, but for /whatever it gets juicy :
 
-![Screenshot from 2025-03-04 15-24-48.png](Breach%20Sensitive%20Data%20Exposure%20hidden%20file%20robots%20%201ac8c6dd81a18037bfa2da9a209468a7/Screenshot_from_2025-03-04_15-24-48.png)
 
 we donwload it and get a user:password kind of kv pair. 
 
@@ -49,8 +48,6 @@ https://example.com/admin
 and then we input root:qwerty123@
 
 and we get the flag :) 
-
-![Screenshot from 2025-03-04 15-22-39.png](Breach%20Sensitive%20Data%20Exposure%20hidden%20file%20robots%20%201ac8c6dd81a18037bfa2da9a209468a7/Screenshot_from_2025-03-04_15-22-39.png)
 
 # how to avoid ?
 
